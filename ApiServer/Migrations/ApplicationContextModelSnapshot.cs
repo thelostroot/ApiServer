@@ -33,8 +33,6 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("SourceId");
 
-                    b.Property<string>("Tags");
-
                     b.Property<string>("Title");
 
                     b.HasKey("Id");

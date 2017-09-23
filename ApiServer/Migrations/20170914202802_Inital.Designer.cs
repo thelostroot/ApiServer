@@ -11,7 +11,7 @@ using System;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20170913225040_Inital")]
+    [Migration("20170914202802_Inital")]
     partial class Inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,6 @@ namespace ApiServer.Migrations
                     b.Property<DateTime>("PublishTime");
 
                     b.Property<int>("SourceId");
-
-                    b.Property<string>("Tags");
 
                     b.Property<string>("Title");
 

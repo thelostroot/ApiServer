@@ -16,15 +16,14 @@ namespace ApiServer.Models
         public Category Category { get; set; }
 
         public string ArticleText { get; set; }
-        public string Tags { get; set; }
 
         public List<Comment> Comments { get; set; }
-        public List<ArticleTags> ArticleTagses { get; set; }
+        public List<ArticleTags> ArticleTags { get; set; }
 
         public Article()
         {
             Comments = new List<Comment>();
-            ArticleTagses = new List<ArticleTags>();
+            ArticleTags = new List<ArticleTags>();
         }
     }
 }

@@ -75,7 +75,6 @@ namespace ApiServer.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     PublishTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SourceId = table.Column<int>(type: "int", nullable: false),
-                    Tags = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

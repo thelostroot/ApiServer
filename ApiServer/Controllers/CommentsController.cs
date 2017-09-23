@@ -61,6 +61,9 @@ namespace ApiServer.Controllers
                 return BadRequest();
             }
 
+            if (comment.ArticleId == 0)
+                return BadRequest();
+
             _context.Entry(comment).State = EntityState.Modified;
 
             try
@@ -90,6 +93,8 @@ namespace ApiServer.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if (comment.ArticleId == 0)
+                return BadRequest();
 
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();

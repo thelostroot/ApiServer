@@ -7,11 +7,11 @@ namespace ApiServer.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public List<ArticleTags> ArticleTagses { get; set; }
+        public List<ArticleTags> ArticleTags { get; set; }
 
         public Tag()
         {
-            ArticleTagses = new List<ArticleTags>();
+            ArticleTags = new List<ArticleTags>();
         }
     }
 }

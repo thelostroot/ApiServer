@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiServer;
 using ApiServer.Models;
+using ApiServer.Proxies;
 
 namespace ApiServer.Controllers
 {
@@ -23,28 +24,48 @@ namespace ApiServer.Controllers
 
         // GET: api/Articles
         [HttpGet]
-        public IEnumerable<Article> GetArticles()
+        public IEnumerable<ArticleProxy> GetArticles()
         {
-            return _context.Articles;
+            var result = new List<ArticleProxy>();
+
+            var articles = _context.Articles
+                .Include(x => x.ArticleTags).ThenInclude(at => at.Tag)
+                .Include(x => x.Comments).ThenInclude(c => c.User)
+                .Include(x => x.Category)
+                .Include(x => x.Source).ToList();
+
+            foreach (var article in articles)
+            {
+                var articleProxy = new ArticleProxy(article);
+                result.Add(articleProxy);
+            }
+
+            return result;
         }
+        
 
         // GET: api/Articles/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetArticle([FromRoute] int id)
+        public ActionResult GetArticle([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var article = await _context.Articles.SingleOrDefaultAsync(m => m.Id == id);
+            var article = _context.Articles
+                .Include(x => x.ArticleTags).ThenInclude(at => at.Tag)
+                .Include(x => x.Comments).ThenInclude(x => x.User)
+                .Include(x => x.Category)
+                .Include(x => x.Source)
+                .SingleOrDefault(m => m.Id == id);
 
             if (article == null)
-            {
                 return NotFound();
-            }
 
-            return Ok(article);
+            var articleProxy = new ArticleProxy(article);
+
+            return Ok(articleProxy);
         }
 
         // PUT: api/Articles/5
@@ -60,6 +81,9 @@ namespace ApiServer.Controllers
             {
                 return BadRequest();
             }
+
+            if (article.CategoryId == 0 || article.SourceId == 0)
+                return BadRequest();
 
             _context.Entry(article).State = EntityState.Modified;
 
@@ -90,6 +114,9 @@ namespace ApiServer.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            if(article.CategoryId == 0 || article.SourceId == 0 )
+                return BadRequest();
 
             _context.Articles.Add(article);
             await _context.SaveChangesAsync();

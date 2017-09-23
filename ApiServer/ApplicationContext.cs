@@ -28,12 +28,12 @@ namespace ApiServer
 
             modelBuilder.Entity<ArticleTags>()
                 .HasOne(at => at.Article)
-                .WithMany(a => a.ArticleTagses)
+                .WithMany(a => a.ArticleTags)
                 .HasForeignKey(at => at.ArticleId);
 
             modelBuilder.Entity<ArticleTags>()
                 .HasOne(at => at.Tag)
-                .WithMany(t => t.ArticleTagses)
+                .WithMany(t => t.ArticleTags)
                 .HasForeignKey(at => at.TagId);
         }
 
