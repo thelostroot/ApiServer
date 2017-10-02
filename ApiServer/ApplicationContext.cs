@@ -35,6 +35,14 @@ namespace ApiServer
                 .HasOne(at => at.Tag)
                 .WithMany(t => t.ArticleTags)
                 .HasForeignKey(at => at.TagId);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Login)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
 
         public DbSet<ApiServer.Models.ArticleTags> ArticleTags { get; set; }

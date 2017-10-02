@@ -122,13 +122,26 @@ namespace ApiServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<bool>("Confirmed");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
-                    b.Property<string>("Pass");
+                    b.Property<string>("Login")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.Property<string>("Role");
 
                     b.HasKey("Id");
 
@@ -151,12 +164,12 @@ namespace ApiServer.Migrations
             modelBuilder.Entity("ApiServer.Models.ArticleTags", b =>
                 {
                     b.HasOne("ApiServer.Models.Article", "Article")
-                        .WithMany("ArticleTagses")
+                        .WithMany("ArticleTags")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ApiServer.Models.Tag", "Tag")
-                        .WithMany("ArticleTagses")
+                        .WithMany("ArticleTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -169,7 +182,7 @@ namespace ApiServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ApiServer.Models.User", "User")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
