@@ -10,7 +10,6 @@ namespace ApiServer
     public class ApplicationContext : DbContext
     {
         public DbSet<Article> Articles { get; set; }
-        public DbSet<Source> Sources { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Tag> Tags { get; set; }

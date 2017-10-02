@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiServer", "ApiServer\ApiServer.csproj", "{0468388E-5639-4776-927E-48FED915F839}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiServer.Extensions", "ApiServer.Extensions\ApiServer.Extensions.csproj", "{05E28E4F-381C-4EC0-9DBE-4C8FAD530630}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{0468388E-5639-4776-927E-48FED915F839}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0468388E-5639-4776-927E-48FED915F839}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0468388E-5639-4776-927E-48FED915F839}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05E28E4F-381C-4EC0-9DBE-4C8FAD530630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05E28E4F-381C-4EC0-9DBE-4C8FAD530630}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05E28E4F-381C-4EC0-9DBE-4C8FAD530630}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05E28E4F-381C-4EC0-9DBE-4C8FAD530630}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

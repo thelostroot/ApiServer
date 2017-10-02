@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiServer;
+using ApiServer.Config;
 using ApiServer.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiServer.Controllers
 {
@@ -21,12 +23,6 @@ namespace ApiServer.Controllers
             _context = context;
         }
 
-        // GET: api/Comments
-        [HttpGet]
-        public IEnumerable<Comment> GetComments()
-        {
-            return _context.Comments;
-        }
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
@@ -49,6 +45,7 @@ namespace ApiServer.Controllers
 
         // PUT: api/Comments/5
         [HttpPut("{id}")]
+        [Authorize(Roles = UserRoles.Admin+","+UserRoles.Moderator)]
         public async Task<IActionResult> PutComment([FromRoute] int id, [FromBody] Comment comment)
         {
             if (!ModelState.IsValid)
@@ -60,9 +57,6 @@ namespace ApiServer.Controllers
             {
                 return BadRequest();
             }
-
-            if (comment.ArticleId == 0)
-                return BadRequest();
 
             _context.Entry(comment).State = EntityState.Modified;
 
@@ -87,6 +81,7 @@ namespace ApiServer.Controllers
 
         // POST: api/Comments
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostComment([FromBody] Comment comment)
         {
             if (!ModelState.IsValid)
@@ -104,6 +99,7 @@ namespace ApiServer.Controllers
 
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteComment([FromRoute] int id)
         {
             if (!ModelState.IsValid)

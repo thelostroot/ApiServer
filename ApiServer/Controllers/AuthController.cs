@@ -34,6 +34,9 @@ namespace ApiServer.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] User user)
         {
+           if (User.Identity.IsAuthenticated == true)
+                return BadRequest();
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
