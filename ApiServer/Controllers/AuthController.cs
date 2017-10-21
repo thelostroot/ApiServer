@@ -57,8 +57,7 @@ namespace ApiServer.Controllers
         [HttpPost("Token")]
         public async Task Token([FromBody]LoginProxy loginData)
         {
-            var passHash = _userService.CreatePassHash(loginData.Login, loginData.Password);
-            var user = _context.Users.FirstOrDefault(x => x.Login == loginData.Login && x.Password == passHash);
+            var user = _context.Users.FirstOrDefault(x => x.Login == loginData.Login);
 
             if (user == null)
             {
@@ -66,6 +65,15 @@ namespace ApiServer.Controllers
                 await Response.WriteAsync("Неверный логин или пароль!");
                 return;
             }
+
+            bool validPassword = BCrypt.Net.BCrypt.Verify(loginData.Password, user.Password);
+            if(!validPassword)
+            {
+                Response.StatusCode = 400;
+                await Response.WriteAsync("Неверный логин или пароль!");
+                return;
+            }
+
 
             var encodedJwt = _userService.CreateToken(user);
 

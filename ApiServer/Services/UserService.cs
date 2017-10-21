@@ -24,7 +24,7 @@ namespace ApiServer.Services
 
         public User CreateUser(User user)
         {
-            var passHash = CreatePassHash(user.Login, user.Password);
+            var passHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             user.Password = passHash;
 
             user.Role = UserRoles.BasicUser;
@@ -33,11 +33,11 @@ namespace ApiServer.Services
             return user;
         }
 
-        public string CreatePassHash(string login, string password)
+        /*public string CreatePassHash(string login, string password)
         {
             var passHash = MD5Helper.CreateHash($"{login}{RandomSalt}{password}");
             return passHash;
-        }
+        }*/
 
         public string CreateToken(User user)
         {

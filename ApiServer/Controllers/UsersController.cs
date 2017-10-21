@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiServer;
+using ApiServer.Config;
 using ApiServer.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiServer.Controllers
 {
@@ -23,6 +25,7 @@ namespace ApiServer.Controllers
 
         // GET: api/Users
         [HttpGet]
+        [Authorize(Roles = UserRoles.Admin)]
         public IEnumerable<User> GetUsers()
         {
             return _context.Users;
@@ -30,6 +33,7 @@ namespace ApiServer.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -49,6 +53,7 @@ namespace ApiServer.Controllers
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)
         {
             if (!ModelState.IsValid)
@@ -84,6 +89,7 @@ namespace ApiServer.Controllers
 
         // POST: api/Users
         [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> PostUser([FromBody] User user)
         {
             if (!ModelState.IsValid)
@@ -99,6 +105,7 @@ namespace ApiServer.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
