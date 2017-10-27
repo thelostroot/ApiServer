@@ -28,7 +28,7 @@ namespace ApiServer.Controllers
             _context = context;
         }
 
-        // GET: api/Articles
+        // GET: api/Posts
         [HttpGet]
         public ActionResult GetPosts()
         {
@@ -40,7 +40,7 @@ namespace ApiServer.Controllers
         }
         
 
-        // GET: api/Articles/5
+        // GET: api/Posts/5
         [HttpGet("{id}")]
         public ActionResult GetPost([FromRoute] int id)
         {
@@ -61,7 +61,7 @@ namespace ApiServer.Controllers
             return Ok(new PostProxy(post));
         }
 
-        // GET: api/Articles/5/full
+        // GET: api/Posts/5/full
         [HttpGet("{id}/full")]
         public ActionResult GetFullPost([FromRoute] int id)
         {
@@ -84,49 +84,63 @@ namespace ApiServer.Controllers
         }
 
 
-        // TODO: Разобраться с возвращением результата
-        // GET: api/Articles/5/Comments
-        [HttpGet("{id}/Comments")]
-        public ActionResult GetPostComments([FromRoute] int id)
+        // GET: api/Posts/Hot
+        [HttpGet("hot")]
+        public ActionResult GetHotPosts()
         {
-            var post = _context.Posts
-                .Include(x => x.Comments).ThenInclude(x => x.User)
-                .FirstOrDefault(x => x.Id == id);
+            var posts = _context.Posts
+                .Include(x => x.PostTags).ThenInclude(at => at.Tag)
+                .Include(x => x.Category);
 
-            if (post != null)
-            {
-                return Json(post.Comments.Select( x => new
-                {
-                    Id = x.Id,
-                    Text = x.Text,
-                    User = new {
-                        Name = x.User.Name,
-                        LastName = x.User.LastName,
-                        Role = x.User.Role
-                    }
-                }));
-            }
-            else
-                return BadRequest("Статья не найдена!");
+            return Json(posts.Select(x => new PostProxy(x)));
         }
 
-        // TODO: Разобраться с возвращением результата
-        // GET: api/Articles/5/Tags
-        [HttpGet("{id}/Tags")]
-        public ActionResult GetPostTags([FromRoute] int id)
+        // GET: api/Posts/Interesting
+        [HttpGet("interesting")]
+        public ActionResult GetInterestingPosts()
         {
-            var post = _context.Posts.FirstOrDefault(x => x.Id == id);
-            if (post != null)
-            {
-                var tags = _context.PostTags.Where(x => x.PostId == id).Include(x => x.Tag).Select(x => x.Tag).ToList();
-                return Json(tags.Select(x => new 
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }));
-            }
-            else
-                return BadRequest("Статья не найдена!");
+            var posts = _context.Posts
+                .Include(x => x.PostTags).ThenInclude(at => at.Tag)
+                .Include(x => x.Category);
+
+            return Json(posts.Select(x => new PostProxy(x)));
+        }
+
+        // GET: api/Posts/month
+        [HttpGet("month")]
+        public ActionResult GetMonthPosts()
+        {
+            var posts = _context.Posts
+                .Include(x => x.PostTags).ThenInclude(at => at.Tag)
+                .Include(x => x.Category);
+
+            return Json(posts.Select(x => new PostProxy(x)));
+        }
+
+        // GET: api/Posts/category/1
+        [HttpGet("category/{categoryId}")]
+        public ActionResult GetPostsByCategory(int categoryId)
+        {
+            var posts = _context.Posts.Where(x => x.CategoryId == categoryId)
+                .Include(x => x.PostTags).ThenInclude(at => at.Tag)
+                .Include(x => x.Category);
+
+            return Json(posts.Select(x => new PostProxy(x)));
+        }
+
+        // GET: api/Posts/tag/2017
+        [HttpGet("tag/{tagName}")]
+        public ActionResult GetPostsByTag(string tagName)
+        {
+            /*var posts = _context.Posts.Where(x => x.CategoryId == categoryId)
+                .Include(x => x.PostTags).ThenInclude(at => at.Tag)
+                .Include(x => x.Category);*/
+
+            var tag = _context.Tags.FirstOrDefault(x => x.Name == tagName);
+
+            var postTags = _context.PostTags.Where(x => x.TagId == tag.Id).Include(x => x.Post).ThenInclude(x => x.Category).ToList();
+
+            return Json(postTags.Select(x => new PostProxy(x.Post)));            
         }
 
         // PUT: api/Articles/5
