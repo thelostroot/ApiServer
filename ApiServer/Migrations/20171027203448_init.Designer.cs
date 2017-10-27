@@ -11,7 +11,7 @@ using System;
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20171027135357_init")]
+    [Migration("20171027203448_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,7 +64,10 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<string>("PostText");
+                    b.Property<string>("Image");
+
+                    b.Property<string>("PostText")
+                        .IsRequired();
 
                     b.Property<DateTime>("PublishTime");
 
@@ -108,6 +111,8 @@ namespace ApiServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Avatar");
 
                     b.Property<bool>("Confirmed");
 

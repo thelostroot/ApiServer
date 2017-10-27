@@ -63,7 +63,10 @@ namespace ApiServer.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<string>("PostText");
+                    b.Property<string>("Image");
+
+                    b.Property<string>("PostText")
+                        .IsRequired();
 
                     b.Property<DateTime>("PublishTime");
 
@@ -107,6 +110,8 @@ namespace ApiServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Avatar");
 
                     b.Property<bool>("Confirmed");
 

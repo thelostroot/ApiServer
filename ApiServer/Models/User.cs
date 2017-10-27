@@ -32,6 +32,7 @@ namespace ApiServer.Models
         [Required]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Длина фамилии должна быть больше 2 символов!")]
         public string LastName { get; set; }
-    
+
+        public string Avatar { get; set; }    
     }
 }

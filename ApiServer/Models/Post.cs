@@ -9,7 +9,7 @@ namespace ApiServer.Models
         [Required]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Название статьи не может быть пустым")]
+        [Required(ErrorMessage = "Название новости не может быть пустым")]
         public string Title { get; set; }
 
         public DateTime PublishTime { get; set; }
@@ -18,8 +18,10 @@ namespace ApiServer.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        // TODO: Исправить имя
+        [Required(ErrorMessage = "Текст новости не может быть пустым")]
         public string PostText { get; set; }
+
+        public string Image { get; set; }
 
         public List<Comment> Comments { get; set; }
         public List<PostTags> PostTags { get; set; }
