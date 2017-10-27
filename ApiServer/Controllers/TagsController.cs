@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiServer;
 using ApiServer.Models;
+using ApiServer.Proxies;
 
 namespace ApiServer.Controllers
 {
@@ -23,9 +24,9 @@ namespace ApiServer.Controllers
 
         // GET: api/Tags
         [HttpGet]
-        public IEnumerable<Tag> GetTags()
+        public IEnumerable<TagProxy> GetTags()
         {
-            return _context.Tags;
+            return _context.Tags.Select(x => new TagProxy(x));
         }
 
         // GET: api/Tags/5
@@ -44,7 +45,7 @@ namespace ApiServer.Controllers
                 return NotFound();
             }
 
-            return Ok(tag);
+            return Ok(new TagProxy(tag));
         }
 
         // PUT: api/Tags/5

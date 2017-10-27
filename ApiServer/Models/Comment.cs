@@ -17,7 +17,7 @@ namespace ApiServer.Models
         public User User { get; set; }
 
         [Required]
-        public int ArticleId { get; set; }
-        public Article Article { get; set; }
+        public int PostId { get; set; }
+        public Post Post { get; set; }
     }
 }

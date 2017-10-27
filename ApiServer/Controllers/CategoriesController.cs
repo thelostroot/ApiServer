@@ -9,6 +9,7 @@ using ApiServer;
 using ApiServer.Config;
 using ApiServer.Models;
 using Microsoft.AspNetCore.Authorization;
+using ApiServer.Proxies;
 
 namespace ApiServer.Controllers
 {
@@ -25,9 +26,9 @@ namespace ApiServer.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public IEnumerable<Category> GetCategories()
+        public IEnumerable<CategoryProxy> GetCategories()
         {
-            return _context.Categories;
+            return _context.Categories.Select(x => new CategoryProxy(x));
         }
 
         // GET: api/Categories/5
@@ -46,7 +47,7 @@ namespace ApiServer.Controllers
                 return NotFound();
             }
 
-            return Ok(category);
+            return Ok( new CategoryProxy(category) );
         }
 
         // PUT: api/Categories/5

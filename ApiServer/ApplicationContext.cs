@@ -9,7 +9,7 @@ namespace ApiServer
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<Post> Posts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Tag> Tags { get; set; }
@@ -22,17 +22,17 @@ namespace ApiServer
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ArticleTags>()
-                .HasKey(t => new { t.ArticleId, t.TagId });
+            modelBuilder.Entity<PostTags>()
+                .HasKey(t => new { t.PostId, t.TagId });
 
-            modelBuilder.Entity<ArticleTags>()
-                .HasOne(at => at.Article)
-                .WithMany(a => a.ArticleTags)
-                .HasForeignKey(at => at.ArticleId);
+            modelBuilder.Entity<PostTags>()
+                .HasOne(at => at.Post)
+                .WithMany(a => a.PostTags)
+                .HasForeignKey(at => at.PostId);
 
-            modelBuilder.Entity<ArticleTags>()
+            modelBuilder.Entity<PostTags>()
                 .HasOne(at => at.Tag)
-                .WithMany(t => t.ArticleTags)
+                .WithMany(t => t.PostTags)
                 .HasForeignKey(at => at.TagId);
 
             modelBuilder.Entity<User>()
@@ -44,6 +44,6 @@ namespace ApiServer
                 .IsUnique();
         }
 
-        public DbSet<ApiServer.Models.ArticleTags> ArticleTags { get; set; }
+        public DbSet<ApiServer.Models.PostTags> PostTags { get; set; }
     }
 }

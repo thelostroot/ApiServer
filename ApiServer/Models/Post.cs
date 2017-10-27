@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiServer.Models
 {
-    public class Article
+    public class Post
     {
         [Required]
         public int Id { get; set; }
@@ -19,15 +19,15 @@ namespace ApiServer.Models
         public Category Category { get; set; }
 
         // TODO: Исправить имя
-        public string ArticleText { get; set; }
+        public string PostText { get; set; }
 
         public List<Comment> Comments { get; set; }
-        public List<ArticleTags> ArticleTags { get; set; }
+        public List<PostTags> PostTags { get; set; }
 
-        public Article()
+        public Post()
         {
             Comments = new List<Comment>();
-            ArticleTags = new List<ArticleTags>();
+            PostTags = new List<PostTags>();
         }
     }
 }

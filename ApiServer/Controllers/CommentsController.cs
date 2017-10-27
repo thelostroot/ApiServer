@@ -88,7 +88,7 @@ namespace ApiServer.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (comment.ArticleId == 0)
+            if (comment.PostId == 0)
                 return BadRequest();
 
             _context.Comments.Add(comment);

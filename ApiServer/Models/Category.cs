@@ -10,11 +10,11 @@ namespace ApiServer.Models
         [Required]
         public string Name { get; set; }
 
-        public List<Article> Articles { get; set; }
+        public List<Post> Posts { get; set; }
 
         public Category()
         {
-            Articles = new List<Article>();
+            Posts = new List<Post>();
         }
     }
 }
