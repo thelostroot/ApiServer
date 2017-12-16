@@ -10,7 +10,7 @@ namespace ApiServer.Models
         public int Id { get; set; }
 
         [Required]
-        [RegularExpression(@"^[a-z0-9_-]{3,16}$", ErrorMessage = "Логин должен состоять может из латинских букв, цифр и знака нижнего подчеркивания")]
+        /*[RegularExpression(@"^[a-z0-9_-]{3,16}$", ErrorMessage = "Логин должен состоять может из латинских букв, цифр и знака нижнего подчеркивания")]*/
         public string Login { get; set; }
 
         [Required]

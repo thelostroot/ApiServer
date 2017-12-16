@@ -11,6 +11,8 @@ namespace ApiServer.Proxies
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public TagProxy() { }
+
         public TagProxy(Tag tag)
         {
             Id = tag.Id;

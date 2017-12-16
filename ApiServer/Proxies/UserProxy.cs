@@ -11,6 +11,8 @@ namespace ApiServer.Proxies
         public int Id { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
+        public string Login { get; set; }
+        public string Email { get; set; }
         public string Avatar { get; set; }
         public string Role { get; set; }
 
@@ -19,6 +21,8 @@ namespace ApiServer.Proxies
             Id = user.Id;
             Name = user.Name;
             LastName = user.LastName;
+            Login = user.Login;
+            Email = user.Email;
             Avatar = user.Avatar;
             Role = user.Role;
         }

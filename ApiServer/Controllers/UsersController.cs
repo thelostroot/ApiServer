@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ApiServer;
 using ApiServer.Config;
 using ApiServer.Models;
+using ApiServer.Proxies;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ApiServer.Controllers
@@ -33,7 +34,7 @@ namespace ApiServer.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -48,7 +49,7 @@ namespace ApiServer.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok( new UserProxy(user));
         }
 
         // PUT: api/Users/5

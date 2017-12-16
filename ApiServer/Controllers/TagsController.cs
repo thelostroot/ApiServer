@@ -92,6 +92,9 @@ namespace ApiServer.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (_context.Tags.FirstOrDefault(x => x.Name == tag.Name) != null)
+                return BadRequest("Тег с таким именем уже существует");
+
             _context.Tags.Add(tag);
             await _context.SaveChangesAsync();
 

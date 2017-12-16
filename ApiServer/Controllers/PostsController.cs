@@ -14,6 +14,8 @@ using ApiServer.Models;
 using ApiServer.Proxies;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using System.Threading;
+using System.IO;
 
 namespace ApiServer.Controllers
 {
@@ -132,39 +134,62 @@ namespace ApiServer.Controllers
         [HttpGet("tag/{tagName}")]
         public ActionResult GetPostsByTag(string tagName)
         {
-            /*var posts = _context.Posts.Where(x => x.CategoryId == categoryId)
-                .Include(x => x.PostTags).ThenInclude(at => at.Tag)
-                .Include(x => x.Category);*/
-
             var tag = _context.Tags.FirstOrDefault(x => x.Name == tagName);
+            //var postTags = _context.PostTags.Where(x => x.TagId == tag.Id).Include(x => x.Post).ThenInclude(x => x.PostTags).ToList();
+            var postTags = _context.Posts.Where(post => post.PostTags.FirstOrDefault(pt => pt.Tag.Name == tagName) != null)
+                .Include(x => x.PostTags)
+                    .ThenInclude(x => x.Tag)
+                .Include(x => x.Category);
 
-            var postTags = _context.PostTags.Where(x => x.TagId == tag.Id).Include(x => x.Post).ThenInclude(x => x.Category).ToList();
-
-            return Json(postTags.Select(x => new PostProxy(x.Post)));            
+            return Json(postTags.Select(x => new PostProxy(x)));            
         }
 
         // PUT: api/Articles/5
         [HttpPut("{id}")]
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> PutPost([FromRoute] int id, [FromBody] Post post)
+        public async Task<IActionResult> PutPost([FromRoute] int id, [FromBody] EditPostProxy editPostProxy)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != post.Id)
+            if (id != editPostProxy.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(post).State = EntityState.Modified;
+            var post = new Post()
+            {
+                Id = editPostProxy.Id,
+                Title = editPostProxy.Title,
+                PostText = editPostProxy.Text,
+                CategoryId = editPostProxy.CategoryId
+            };
+            
 
             try
             {
+                // Обновляем пост
+                _context.Entry(post).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+
+                // Удаляем старые теги поста
+                 _context.PostTags.RemoveRange(_context.PostTags.Where(pt => pt.PostId == post.Id));
+                await _context.SaveChangesAsync();
+
+                // Добавляем новые теги поста
+                foreach (var tag in editPostProxy.Tags)
+                {
+                    _context.PostTags.Add(new PostTags()
+                    {
+                        PostId = post.Id,
+                        TagId = tag.Id
+                    });
+                }
+                await _context.SaveChangesAsync();
+            }               
+            catch (DbUpdateConcurrencyException e)
             {
                 if (!PostExists(id))
                 {
@@ -175,24 +200,54 @@ namespace ApiServer.Controllers
                     throw;
                 }
             }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
 
             return NoContent();
-        }
+        }        
 
         // POST: api/Articles
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> PostPost([FromBody] Post post)
+        public async Task<IActionResult> PostPost([FromBody] EditPostProxy editPostProxy)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Posts.Add(post);
-            await _context.SaveChangesAsync();
+            var post = new Post()
+            {
+                Title = editPostProxy.Title,
+                PostText = editPostProxy.Text,
+                CategoryId = editPostProxy.CategoryId,
+                PublishTime = DateTime.Now,
+                Image = "500x350.png"
+            };
 
-            return CreatedAtAction("GetPost", new { id = post.Id }, post);
+            try
+            {
+                _context.Posts.Add(post);
+                await _context.SaveChangesAsync();
+
+                foreach (var tag in editPostProxy.Tags)
+                {
+                    _context.PostTags.Add(new PostTags()
+                    {
+                        PostId = post.Id,
+                        TagId = tag.Id
+                    });
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+            return Ok(new { id = post.Id });
         }
 
         // DELETE: api/Articles/5

@@ -83,7 +83,7 @@ namespace ApiServer.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new CategoryProxy(category));
         }
 
         // POST: api/Categories

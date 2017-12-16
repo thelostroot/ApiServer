@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ApiServer;
 using ApiServer.Config;
 using ApiServer.Models;
+using ApiServer.Proxies;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ApiServer.Controllers
@@ -40,7 +41,7 @@ namespace ApiServer.Controllers
                 return NotFound();
             }
 
-            return Ok(comment);
+            return Ok( new CommentProxy(comment));
         }
 
         // PUT: api/Comments/5
